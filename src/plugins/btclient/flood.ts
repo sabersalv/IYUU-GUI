@@ -6,7 +6,8 @@ import {
 } from "@/interfaces/BtClient/AbstractClient";
 
 import axios from "axios";
-import fetch from "node-fetch/lib";
+import nodeFetch from "node-fetch/lib";
+import fetch from "@/utils/fetch"; 
 import { omitBy, isNil } from "lodash";
 import {
   TorrentProperties,
@@ -26,7 +27,7 @@ export const defaultFloodConfig: FloodTorrentClientConfig = {
   address: "http://localhost:3000",
   username: "",
   password: "",
-  timeout: 3 * 60 * 1e3,
+  timeout: 60 * 1e3,
 };
 
 export default class Flood implements TorrentClient {
@@ -113,7 +114,7 @@ export default class Flood implements TorrentClient {
           start: !options.addAtPaused,
           isBasePath: true,
         };
-        return await this.request(
+        return await   this.request(
           "POST",
           "/torrents/add-urls",
           omitBy(params, isNil)
@@ -174,12 +175,15 @@ export default class Flood implements TorrentClient {
       `${this.config.address}/api${path}`,
       omitBy(
         {
+          customFetch: nodeFetch,
           method,
           body: data ? JSON.stringify(data) : null,
           headers: {
             "Content-Type": "application/json",
             Cookie: this.cookie,
           },
+          // fix hang forever
+          timeout: this.config.timeout,
         },
         isNil
       )
