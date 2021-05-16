@@ -100,6 +100,8 @@ export default class Flood implements TorrentClient {
           destination: options.savePath,
           tags: options.label ? [options.label] : undefined,
           start: !options.addAtPaused,
+          isBasePath: true,
+          isCompleted: true,
         };
         return await this.request(
           "POST",
@@ -113,6 +115,7 @@ export default class Flood implements TorrentClient {
           tags: options.label ? [options.label] : undefined,
           start: !options.addAtPaused,
           isBasePath: true,
+          isCompleted: true,
         };
         return await   this.request(
           "POST",
@@ -161,7 +164,7 @@ export default class Flood implements TorrentClient {
     }
     const body = await await res.json();
     if (res.status >= 400) {
-      throw new Error(`${body.message} -- ${method} ${path}`);
+      throw new Error(`${body.message} -- ${method} ${path} ${res.status} ${res.statusText}`);
     }
     return body;
   }
