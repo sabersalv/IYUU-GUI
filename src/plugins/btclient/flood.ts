@@ -89,6 +89,7 @@ export default class Flood implements TorrentClient {
     url: string,
     options: Partial<AddTorrentOptions> = {}
   ): Promise<boolean> {
+    const defaultTags = ['crossseed']
     try {
       if (options.localDownload) {
         const req = await axios.get(url, {
@@ -98,7 +99,7 @@ export default class Flood implements TorrentClient {
         const params: AddTorrentByFileOptions = {
           files,
           destination: options.savePath,
-          tags: options.label ? [options.label] : undefined,
+          tags: options.label ? [options.label] : defaultTags,
           start: !options.addAtPaused,
           isBasePath: true,
           isCompleted: true,
@@ -112,7 +113,7 @@ export default class Flood implements TorrentClient {
         const params: AddTorrentByURLOptions = {
           urls: [url],
           destination: options.savePath,
-          tags: options.label ? [options.label] : undefined,
+          tags: options.label ? [options.label] : defaultTags,
           start: !options.addAtPaused,
           isBasePath: true,
           isCompleted: true,
