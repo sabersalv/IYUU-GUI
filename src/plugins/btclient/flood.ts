@@ -117,7 +117,7 @@ export default class Flood implements TorrentClient {
           isBasePath: true,
           isCompleted: true,
         };
-        return await   this.request(
+        return await this.request(
           "POST",
           "/torrents/add-urls",
           omitBy(params, isNil)
@@ -163,6 +163,12 @@ export default class Flood implements TorrentClient {
       }
     }
     const body = await await res.json();
+    if (["/torrents/add-urls", "/torrents/add-files"].includes(path)) {
+      // { code: -32602, message: "Could not create download: Info hash already used by another torrent." }
+      if (res.status === 500 && body.code === -32602 ) {
+        return true
+      } 
+    }
     if (res.status >= 400) {
       throw new Error(`${body.message} -- ${method} ${path} ${res.status} ${res.statusText}`);
     }
