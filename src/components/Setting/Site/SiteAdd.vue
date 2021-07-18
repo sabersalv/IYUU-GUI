@@ -147,7 +147,7 @@ export default {
       if (isForceDownloadSite(site)) {
         this.disable_link = true
         this.link_placeholder = '该站点无法构造种子下载链接，请填写Cookies项'
-        this.site_add_form.link = ''
+        this.site_add_form.link = this.$store.getters['IYUU/siteDownloadLinkTpl'](site).replace('&uid={uid}&hash={hash}', '')
       } else {
         this.disable_link = false
         this.link_placeholder = ''

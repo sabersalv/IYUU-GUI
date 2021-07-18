@@ -15,7 +15,7 @@ export interface TorrentClient {
     removeTorrent: (id: any, removeData?: boolean) => Promise<boolean>;
 }
 
-export type clientType = 'qbittorrent' | 'transmission' | 'deluge' | 'rtorrent'
+export type clientType = 'qbittorrent' | 'transmission' | 'deluge' | 'rtorrent' | 'flood'
 
 export interface TorrentClientConfig {
     /**
